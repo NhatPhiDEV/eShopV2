@@ -45,8 +45,8 @@ public class LoaiSanPhamDAO
 
         foreach (DataRow row in data.Rows)
         {
-            var sanPham = new LoaiSanPhamModel(row);
-            danhSachLoaiSanPham.Add(sanPham);
+            var loaiSanPham = new LoaiSanPhamModel(row);
+            danhSachLoaiSanPham.Add(loaiSanPham);
         }
 
         return danhSachLoaiSanPham;

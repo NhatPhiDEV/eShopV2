@@ -279,11 +279,9 @@ namespace eShop.From
             form.ShowDialog();
         }
 
-        #endregion
-
         private void menuAdmin_Click(object sender, EventArgs e)
         {
-            var form = new fAdmin();
+            var form = new fAdmin(_nguoiDungHienTai.MaTaiKhoan);
             form.ShowDialog();
         }
 
@@ -291,5 +289,7 @@ namespace eShop.From
         {
             HienThiDanhSachSanPham();
         }
+        #endregion
+
     }
 }
