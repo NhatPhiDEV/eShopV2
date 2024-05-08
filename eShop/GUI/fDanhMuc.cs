@@ -16,6 +16,7 @@ namespace eShop.From
             InitializeComponent();
 
             _nguoiDungHienTai = DangNhapDAO.Instance.LayThongTinNguoiDung(tenDangNhap);
+            menuTaiKhoan.Text += " (" + _nguoiDungHienTai.TenNguoiDung + ")";
             HienThiComboLoaiSanPham();
             PhanQuyen();
         }
@@ -236,10 +237,10 @@ namespace eShop.From
         {
             int macDinh = 0;
             string? timKiem = string.IsNullOrEmpty(tbTimKiem.Text) ? null : tbTimKiem.Text.Trim().ToLower();
-            if(cbLoaiSanPham.SelectedValue != null)
+            if (cbLoaiSanPham.SelectedValue != null)
             {
                 _ = int.TryParse(cbLoaiSanPham.SelectedValue.ToString(), out int selectedValue);
-                if(selectedValue == macDinh)
+                if (selectedValue == macDinh)
                 {
                     HienThiDanhSachSanPham();
                 }

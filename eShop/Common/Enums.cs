@@ -39,7 +39,8 @@ public class Enums
     {
         KhongTonTai = 404, // Không tồn tại
         ThanhCong = 1, // Thành công
-        ThatBai = 0 // Thât bại
+        ThatBai = 0, // Thât bại
+        DangSuDung = -1
     }
 
     public enum ELoaiXuLy

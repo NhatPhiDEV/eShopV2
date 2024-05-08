@@ -32,7 +32,6 @@
             tabSanPham = new TabPage();
             panel4 = new Panel();
             tbTimKiem = new TextBox();
-            btnTimKiem = new Button();
             panel3 = new Panel();
             lvSanPham = new ListView();
             colTenSP = new ColumnHeader();
@@ -75,8 +74,7 @@
             colMaLoaiSanPham = new ColumnHeader();
             colTenLoaiSanPham = new ColumnHeader();
             panel10 = new Panel();
-            textBox1 = new TextBox();
-            btnTimKiemLoaiSP = new Button();
+            tbTimKiemLoaiSP = new TextBox();
             panel11 = new Panel();
             lbMaLoaiSanPham = new Label();
             label6 = new Label();
@@ -146,7 +144,6 @@
             // panel4
             // 
             panel4.Controls.Add(tbTimKiem);
-            panel4.Controls.Add(btnTimKiem);
             panel4.Location = new Point(550, 6);
             panel4.Name = "panel4";
             panel4.Size = new Size(375, 50);
@@ -157,18 +154,9 @@
             tbTimKiem.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             tbTimKiem.Location = new Point(2, 11);
             tbTimKiem.Name = "tbTimKiem";
-            tbTimKiem.Size = new Size(236, 29);
+            tbTimKiem.Size = new Size(365, 29);
             tbTimKiem.TabIndex = 5;
-            // 
-            // btnTimKiem
-            // 
-            btnTimKiem.Location = new Point(244, 8);
-            btnTimKiem.Name = "btnTimKiem";
-            btnTimKiem.Size = new Size(127, 35);
-            btnTimKiem.TabIndex = 4;
-            btnTimKiem.Text = "Tìm kiếm";
-            btnTimKiem.UseVisualStyleBackColor = true;
-            btnTimKiem.Click += btnTimKiem_Click;
+            tbTimKiem.KeyDown += tbTimKiem_KeyDown;
             // 
             // panel3
             // 
@@ -253,10 +241,11 @@
             // lbMaSP
             // 
             lbMaSP.AutoSize = true;
-            lbMaSP.Location = new Point(197, 132);
+            lbMaSP.Location = new Point(197, 135);
             lbMaSP.Name = "lbMaSP";
-            lbMaSP.Size = new Size(0, 17);
+            lbMaSP.Size = new Size(79, 17);
             lbMaSP.TabIndex = 11;
+            lbMaSP.Text = "maSanPham";
             lbMaSP.Visible = false;
             // 
             // panel9
@@ -284,10 +273,12 @@
             // 
             lbDuongDanAnh.AutoSize = true;
             lbDuongDanAnh.Font = new Font("Segoe UI", 9.75F, FontStyle.Italic, GraphicsUnit.Point, 0);
-            lbDuongDanAnh.Location = new Point(9, 176);
+            lbDuongDanAnh.Location = new Point(197, 166);
             lbDuongDanAnh.Name = "lbDuongDanAnh";
-            lbDuongDanAnh.Size = new Size(0, 17);
+            lbDuongDanAnh.Size = new Size(88, 17);
             lbDuongDanAnh.TabIndex = 9;
+            lbDuongDanAnh.Text = "duongDanAnh";
+            lbDuongDanAnh.Visible = false;
             // 
             // btnNhapLai
             // 
@@ -437,7 +428,7 @@
             // 
             // btnChonAnh
             // 
-            btnChonAnh.Location = new Point(197, 67);
+            btnChonAnh.Location = new Point(201, 87);
             btnChonAnh.Name = "btnChonAnh";
             btnChonAnh.Size = new Size(140, 33);
             btnChonAnh.TabIndex = 1;
@@ -452,7 +443,7 @@
             pbAnhSanPham.ErrorImage = null;
             pbAnhSanPham.Location = new Point(3, 0);
             pbAnhSanPham.Name = "pbAnhSanPham";
-            pbAnhSanPham.Size = new Size(159, 164);
+            pbAnhSanPham.Size = new Size(159, 183);
             pbAnhSanPham.SizeMode = PictureBoxSizeMode.Zoom;
             pbAnhSanPham.TabIndex = 0;
             pbAnhSanPham.TabStop = false;
@@ -545,30 +536,20 @@
             // 
             // panel10
             // 
-            panel10.Controls.Add(textBox1);
-            panel10.Controls.Add(btnTimKiemLoaiSP);
+            panel10.Controls.Add(tbTimKiemLoaiSP);
             panel10.Location = new Point(550, 6);
             panel10.Name = "panel10";
             panel10.Size = new Size(375, 50);
             panel10.TabIndex = 7;
             // 
-            // textBox1
+            // tbTimKiemLoaiSP
             // 
-            textBox1.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            textBox1.Location = new Point(2, 11);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(236, 29);
-            textBox1.TabIndex = 5;
-            // 
-            // btnTimKiemLoaiSP
-            // 
-            btnTimKiemLoaiSP.Location = new Point(244, 8);
-            btnTimKiemLoaiSP.Name = "btnTimKiemLoaiSP";
-            btnTimKiemLoaiSP.Size = new Size(127, 35);
-            btnTimKiemLoaiSP.TabIndex = 4;
-            btnTimKiemLoaiSP.Text = "Tìm kiếm";
-            btnTimKiemLoaiSP.UseVisualStyleBackColor = true;
-            btnTimKiemLoaiSP.Click += btnTimKiemLoaiSP_Click;
+            tbTimKiemLoaiSP.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            tbTimKiemLoaiSP.Location = new Point(2, 11);
+            tbTimKiemLoaiSP.Name = "tbTimKiemLoaiSP";
+            tbTimKiemLoaiSP.Size = new Size(369, 29);
+            tbTimKiemLoaiSP.TabIndex = 5;
+            tbTimKiemLoaiSP.KeyDown += tbTimKiemLoaiSP_KeyDown;
             // 
             // panel11
             // 
@@ -793,7 +774,6 @@
         private NumericUpDown numGia;
         private Label label4;
         private Label lbDuongDanAnh;
-        private Button btnTimKiem;
         private TextBox tbTimKiem;
         private ColumnHeader colLoaiSP;
         private ColumnHeader colTenSP;
@@ -809,8 +789,7 @@
         private Label lbMaSP;
         private ColumnHeader colMaSP;
         private Panel panel10;
-        private TextBox textBox1;
-        private Button btnTimKiemLoaiSP;
+        private TextBox tbTimKiemLoaiSP;
         private Panel panel11;
         private Label label6;
         private Label label7;

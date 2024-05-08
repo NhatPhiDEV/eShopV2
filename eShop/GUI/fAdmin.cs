@@ -1,8 +1,6 @@
 ﻿using eShop.Chung;
-using eShop.Common.CustomUI;
 using eShop.DAO;
 using eShop.Models;
-using System.Reflection.PortableExecutable;
 using static eShop.Common.Enums;
 
 namespace eShop.GUI
@@ -17,7 +15,6 @@ namespace eShop.GUI
             HienThiDanhSachSanPham();
             HienThiComboLoaiSanPham();
         }
-
 
         #region Functions
 
@@ -120,7 +117,7 @@ namespace eShop.GUI
             }
         }
 
-        public void LamMoi()
+        public void LamMoiSanPham()
         {
             // Hiển thị lại button
             btnThem.Enabled = true;
@@ -131,13 +128,15 @@ namespace eShop.GUI
             NhapLai();
 
             lbMaSP.Text = null;
+            tbTimKiem.Text = null;
+            tbTimKiem.Focus();
         }
         #endregion
 
         #region Tab Loại sản phẩm
-        public void HienThiDanhSachLoaiSanPham()
+        public void HienThiDanhSachLoaiSanPham(string? timKiem = null)
         {
-            var danhSachSanPham = LoaiSanPhamDAO.Instance.LayDsLoaiSanPham();
+            var danhSachSanPham = LoaiSanPhamDAO.Instance.LayDsLoaiSanPham(timKiem);
             lvLoaiSanPham.Items.Clear();
             foreach (var loaiSanPham in danhSachSanPham)
             {
@@ -150,6 +149,7 @@ namespace eShop.GUI
             btnNhapLaiLoaiSP.Enabled = false;
             btnLuuLoaiSP.Enabled = false;
             btnXoaLoaiSanPham.Enabled = false;
+            tbTimKiemLoaiSP.Focus();
         }
 
         public void LamMoiLoaiSanPham()
@@ -162,6 +162,8 @@ namespace eShop.GUI
 
             lbMaSP.Text = null;
             tbTenLoaiSP.Text = null;
+            tbTimKiem.Text = null;
+            tbTimKiemLoaiSP.Focus();
         }
         #endregion
 
@@ -234,12 +236,12 @@ namespace eShop.GUI
             }
             else if (ketQua == 0)
             {
-                LamMoi();
+                LamMoiSanPham();
                 MessageBox.Show("Thêm mới sản phẩm thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
-                LamMoi();
+                LamMoiSanPham();
                 MessageBox.Show("Cập nhật sản phẩm thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
@@ -266,15 +268,6 @@ namespace eShop.GUI
                         break;
                 }
             }
-        }
-
-        private void btnTimKiem_Click(object sender, EventArgs e)
-        {
-            string? timKiem = string.IsNullOrEmpty(tbTimKiem.Text)
-                ? null
-                : tbTimKiem.Text.Trim().ToLower();
-
-            HienThiDanhSachSanPham(timKiem: timKiem);
         }
 
         private void lvSanPham_SelectedIndexChanged(object sender, EventArgs e)
@@ -313,7 +306,7 @@ namespace eShop.GUI
 
         private void btnLamMoi_Click(object sender, EventArgs e)
         {
-            LamMoi();
+            LamMoiSanPham();
         }
 
         private void btnThem_Click(object sender, EventArgs e)
@@ -347,16 +340,35 @@ namespace eShop.GUI
                     MessageBox.Show("Xóa sản phẩm thành công!",
                         "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     // Load lại danh sách
-                    LamMoi();
+                    LamMoiSanPham();
+                }
+                else if (ketQua == (int)EKetQuaTruyVan.DangSuDung)
+                {
+                    MessageBox.Show("Sản phẩm đang được sử dụng trong hệ thống, không thể xóa!",
+                        "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    LamMoiSanPham();
                 }
                 else
                 {
                     MessageBox.Show("Lỗi hệ thống!",
                         "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    // Load lại danh sách
+                    LamMoiSanPham();
                 }
             }
 
+        }
+
+        private void tbTimKiem_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Return)
+            {
+                string? timKiem = string.IsNullOrEmpty(tbTimKiem.Text) == false
+                ? tbTimKiem.Text.Trim().ToLower()
+                : null;
+
+                HienThiDanhSachSanPham(timKiem: timKiem);
+
+            }
         }
         #endregion
 
@@ -376,11 +388,6 @@ namespace eShop.GUI
             // Clear text
             tbTenLoaiSP.Text = string.Empty;
             lbMaLoaiSanPham.Text = string.Empty;
-        }
-
-        private void btnTimKiemLoaiSP_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void btnNhapLaiLoaiSP_Click(object sender, EventArgs e)
@@ -428,7 +435,7 @@ namespace eShop.GUI
             if (MessageBox.Show($"Bạn có chắc chắn muốn xóa loại sản phẩm {tbTenLoaiSP.Text} này không?", "Thông báo", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
                 _ = int.TryParse(lbMaLoaiSanPham.Text, out int maLoaiSanPham);
-                int ketQua = LoaiSanPhamDAO.Instance.XoaSanPham(maLoaiSanPham);
+                int ketQua = LoaiSanPhamDAO.Instance.XoaLoaiSanPham(maLoaiSanPham);
 
                 if (ketQua == (int)EKetQuaTruyVan.ThanhCong)
                 {
@@ -437,15 +444,20 @@ namespace eShop.GUI
                     // Load lại danh sách
                     LamMoiLoaiSanPham();
                 }
-                else
+                else if (ketQua == (int)EKetQuaTruyVan.DangSuDung)
                 {
                     MessageBox.Show("Loại sản phẩm này đang được sử dụng, không được phép xóa!",
                         "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     LamMoiLoaiSanPham();
                 }
+                else
+                {
+                    MessageBox.Show("Lỗi hệ thống!",
+                        "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    LamMoiLoaiSanPham();
+                }
             }
         }
-
 
         private void lvLoaiSanPham_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -469,10 +481,22 @@ namespace eShop.GUI
             }
         }
 
-        #endregion
+        private void tbTimKiemLoaiSP_KeyDown(object sender, KeyEventArgs e)
+        {          
+            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Return)
+            {
+                string? timKiem = string.IsNullOrEmpty(tbTimKiemLoaiSP.Text)
+                ? null
+                : tbTimKiemLoaiSP.Text.Trim().ToLower();
+
+                HienThiDanhSachLoaiSanPham(timKiem);
+
+            }
+        }
 
         #endregion
 
+        #endregion
 
     }
 }
